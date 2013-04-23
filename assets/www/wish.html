@@ -34,13 +34,13 @@
 
             <div data-role="header" data-theme="d">
                 <h1>Add to Wish List</h1>
-                <a href="index.html" data-icon="arrow-l" data-theme="e" data-iconpos="notext" data-shadow="false" data-iconshadow="false" data-transition="flip" data-role="button" >back</a>
+                <a href="wish-list.html" data-icon="arrow-l" data-theme="e" data-iconpos="notext" data-shadow="false" data-iconshadow="false" data-transition="flip" data-role="button" >back</a>
             </div>
 
             <div data-role="content">
                 <h1 id="notification"></h1>
                 <form id="callAjaxForm" method="POST" action="#">
-                    <input type="hidden" value="2" name="created_by" />
+                    <input type="hidden" value="" name="created_by" id="user_id"/>
                     <textarea cols="40" rows="20" name="message" id="textarea"></textarea>
                     <input id="submit" type="submit" value="Wish it..!!" data-icon="edit" data-iconpos="right" data-mini="true" data-theme="e">
                 </form>
@@ -48,11 +48,37 @@
         </div>
 
         <script>
+                //getCookies
+        function getCookie(c_name){
+            var c_value = document.cookie;
+            var c_start = c_value.indexOf(" " + c_name + "=");
+            if (c_start == -1)
+            {
+                c_start = c_value.indexOf(c_name + "=");
+            }
+            if (c_start == -1)
+            {
+                c_value = null;
+            }
+            else
+            {
+                c_start = c_value.indexOf("=", c_start) + 1;
+                var c_end = c_value.indexOf(";", c_start);
+            if (c_end == -1)
+            {
+                c_end = c_value.length;
+            }
+                c_value = unescape(c_value.substring(c_start,c_end));
+            }
+                return c_value;
+        }
+
+
         function onSuccess(data, status)
         {
             data = $.trim(data);
             // $("#notification").text(data);
-            window.location.href = 'index.html';
+            window.location.href = 'wish-list.html';
         }
 
         function onError(data, status)
@@ -61,13 +87,17 @@
         }
 
         $(document).ready(function() {
+            var user_id = getCookie('user_id');
+            // console.log(user_id);
+            $('#user_id').val(user_id);
+
             $("#callAjaxForm").on("submit", function(evt){
                 evt.preventDefault();
                 var formData = $("#callAjaxForm").serialize();
 
                 $.ajax({
                     type: "POST",
-                    url: "http://192.168.1.115/mominta.com/index.php/home/ajax",
+                    url: "http://ichan0220.com/mominta.com/index.php/home/ajax",
                     cache: false,
                     data: formData,
                     success: onSuccess,
